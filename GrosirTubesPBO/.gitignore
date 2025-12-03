@@ -1,0 +1,20 @@
+# NetBeans specific files
+nbproject/private/
+build/
+dist/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# Ignore compiled classes
+**/*.class
+
+# Maven / Gradle
+target/
+out/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
