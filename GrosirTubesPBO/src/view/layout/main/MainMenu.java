@@ -134,12 +134,9 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(21, 110, 71));
-
         scrollPaneWin111.setBorder(null);
         scrollPaneWin111.setViewportView(menu1);
 
-        body.setBackground(new java.awt.Color(245, 245, 245));
         body.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

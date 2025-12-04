@@ -4,6 +4,8 @@
  */
 package view.component;
 import dao.ProdukDAO;
+import dao.KategoriDAO;
+import dao.SupplierDAO;
 import java.awt.Frame;
 import java.awt.Window;
 import java.util.List;
@@ -16,6 +18,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableRowSorter;
 import java.util.regex.Pattern;
+import model.Kategori;
+import model.Supplier;
 
 
 /**
@@ -24,6 +28,10 @@ import java.util.regex.Pattern;
  */
 public class ProdukForm extends javax.swing.JPanel {
     private ProdukDAO produkDAO;
+    private final KategoriDAO kategoriDAO = new KategoriDAO();
+    private final SupplierDAO supplierDAO = new SupplierDAO();
+    private List<Kategori> listKategori;
+    private List<Supplier> listSupplier;
     private TableRowSorter<DefaultTableModel> rowSorter;
     /**
      * Creates new form ProdukForm
@@ -111,7 +119,7 @@ public class ProdukForm extends javax.swing.JPanel {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Nama Produk", "Harga", "Stok", "ID Kategori", "ID Supplier"
+                "ID", "Nama Produk", "Harga", "Stok", "Kategori", "Supplier"
             }
         ) {
             Class[] types = new Class [] {
@@ -266,7 +274,10 @@ public class ProdukForm extends javax.swing.JPanel {
     private javax.swing.JButton tambahButton;
     // End of variables declaration//GEN-END:variables
     
-     private void loadData() {
+    private void loadData() {
+        listKategori = kategoriDAO.getAllKategori();
+        listSupplier = supplierDAO.getAllSupplier(); 
+         
         DefaultTableModel model = (DefaultTableModel) produkTable.getModel();
         model.setRowCount(0);  
 
@@ -277,8 +288,8 @@ public class ProdukForm extends javax.swing.JPanel {
                 p.getNamaProduk(),    // kolom "Nama Produk"
                 p.getHarga(),         // kolom "Harga"
                 p.getStok(),          // kolom "Stok"
-                p.getIdKategori(),    // kolom "ID Kategori"
-                p.getIdSupplier()     // kolom "ID Supplier"
+                getNamaKategoriById(p.getIdKategori()), 
+                getNamaSupplierById(p.getIdSupplier())
             });
         }
     }
@@ -311,6 +322,24 @@ public class ProdukForm extends javax.swing.JPanel {
             String pattern = "(?i)" + Pattern.quote(text);
             rowSorter.setRowFilter(RowFilter.regexFilter(pattern));
         }
+    }
+    
+    private String getNamaKategoriById(int idKategori) {
+        for (Kategori k : listKategori) {
+            if (k.getIdKategori() == idKategori) {
+                return k.getNamaKategori();
+            }
+        }
+        return "Unknown"; // fallback kalau tidak ketemu
+    }
+
+    private String getNamaSupplierById(int idSupplier) {
+        for (Supplier s : listSupplier) {
+            if (s.getIdSupplier() == idSupplier) {
+                return s.getNamaSupplier();
+            }
+        }
+        return "Unknown";
     }
 
 }

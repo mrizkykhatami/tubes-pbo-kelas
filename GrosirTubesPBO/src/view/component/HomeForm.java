@@ -26,8 +26,6 @@ public class HomeForm extends javax.swing.JPanel {
         geoChart = new raven.chart.geo.GeoChart();
         geoChartDataView = new raven.chart.geo.GeoChartDataView();
 
-        setBackground(new java.awt.Color(245, 245, 245));
-
         geoChart.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

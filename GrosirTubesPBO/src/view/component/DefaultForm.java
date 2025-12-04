@@ -13,8 +13,6 @@ public class DefaultForm extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(245, 245, 245));
-
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(139, 139, 139));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

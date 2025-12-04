@@ -83,6 +83,7 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel4.setText("Password");
 
         loginButton.setBackground(new java.awt.Color(0, 204, 204));
+        loginButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         loginButton.setText("Login");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

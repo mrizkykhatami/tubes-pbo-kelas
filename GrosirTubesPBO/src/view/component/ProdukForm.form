@@ -127,8 +127,8 @@
                 <Column editable="false" title="Nama Produk" type="java.lang.Object"/>
                 <Column editable="false" title="Harga" type="java.lang.Integer"/>
                 <Column editable="false" title="Stok" type="java.lang.Object"/>
-                <Column editable="false" title="ID Kategori" type="java.lang.Object"/>
-                <Column editable="false" title="ID Supplier" type="java.lang.Object"/>
+                <Column editable="false" title="Kategori" type="java.lang.Object"/>
+                <Column editable="false" title="Supplier" type="java.lang.Object"/>
               </Table>
             </Property>
           </Properties>

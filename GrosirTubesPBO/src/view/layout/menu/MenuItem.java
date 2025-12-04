@@ -9,6 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import view.layout.effect.RippleEffect;
 import view.layout.swing.shadow.ShadowRenderer;
@@ -104,7 +105,7 @@ public class MenuItem extends JButton {
         Graphics2D g2 = (Graphics2D) grphcs.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (length != 0) {
-            g2.setColor(new Color(43, 141, 98));
+            g2.setColor(UIManager.getColor("Menu.background"));
             if (subMenuIndex == 1) {
                 //  First Index
                 g2.drawImage(shadow, -shadowSize, -20, null);
