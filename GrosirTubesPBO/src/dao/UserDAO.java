@@ -15,7 +15,7 @@ public class UserDAO {
     
     public List<User> getAllUser() {
         List<User> listUser = new ArrayList<>();
-        String sql = "SELECT * FROM User";
+        String sql = "SELECT * FROM user";
 
         try (Connection conn = Koneksi.getConnection();
              Statement stmt = conn.createStatement();
@@ -38,16 +38,15 @@ public class UserDAO {
         return listUser;
     }
     public void updateUser(User user) {
-        String sql = "UPDATE User SET nama_user = ?, username = ?, pass = ?, role = ? WHERE id_user = ?";
+        String sql = "UPDATE user SET nama_user = ?, username = ?, role = ? WHERE id_user = ?";
 
         try (Connection conn = Koneksi.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getNamaUser());
             ps.setString(2, user.getUsername());
-            ps.setString(3, user.getPass());
-            ps.setString(4, user.getRole());
-            ps.setInt(5, user.getIdUser());
+            ps.setString(3, user.getRole());
+            ps.setInt(4, user.getIdUser());
             ps.executeUpdate();
             
         } catch (SQLException e) {
@@ -56,7 +55,7 @@ public class UserDAO {
     }
     
     public void deleteUser(int idUser) {
-        String sql = "DELETE FROM User WHERE id_user = ?";
+        String sql = "DELETE FROM user WHERE id_user = ?";
 
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -71,7 +70,7 @@ public class UserDAO {
     
     public List<User> searchUser(String keyword) {
         List<User> listUser = new ArrayList<>();
-        String sql = "SELECT * FROM User WHERE nama_user LIKE ?";
+        String sql = "SELECT * FROM user WHERE nama_user LIKE ?";
 
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -90,7 +89,7 @@ public class UserDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error Search Kategori: " + e.getMessage());
+            System.out.println("Error Search User: " + e.getMessage());
         }
         return listUser;
     }

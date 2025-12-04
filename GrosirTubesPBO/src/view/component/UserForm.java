@@ -26,7 +26,7 @@ public class UserForm extends javax.swing.JPanel {
         dao = new UserDAO();
         
         // Setup kolom tabel
-        String[] judul = {"ID", "Nama Karyawan", "Username", "Password", "Role"};
+        String[] judul = {"ID", "Nama Karyawan", "Username", "Role"};
         tableModel = new DefaultTableModel(judul, 0);
         tblUser.setModel(tableModel);
         
@@ -46,7 +46,6 @@ public class UserForm extends javax.swing.JPanel {
                 k.getIdUser(),
                 k.getNamaUser(),
                 k.getUsername(),
-                k.getPass(),
                 k.getRole()
             };
             tableModel.addRow(row);
@@ -87,12 +86,11 @@ public class UserForm extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Pilih data pada tabel terlebih dahulu!");
             return;
         }
-
+        
         String namaa = nama.getText();
         String usn = username.getText();
-        String password = pass.getText();
         String rolee = role.getText();
-        User k = new User(namaa, usn, password, rolee);
+        User k = new User(Integer.parseInt(id.getText()), namaa, usn, rolee);
         dao.updateUser(k);
 
         loadData();
@@ -130,7 +128,6 @@ public class UserForm extends javax.swing.JPanel {
                 k.getIdUser(),
                 k.getNamaUser(),
                 k.getUsername(),
-                k.getPass(),
                 k.getRole()
             };
             tableModel.addRow(row);
@@ -169,13 +166,13 @@ public class UserForm extends javax.swing.JPanel {
 
         tblUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
         tblUser.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -341,16 +338,16 @@ public class UserForm extends javax.swing.JPanel {
         String ID = tblUser.getValueAt(row, 0).toString();
         String namaa = tblUser.getValueAt(row, 1).toString();
         String usn = tblUser.getValueAt(row, 2).toString();
-        String passw = tblUser.getValueAt(row, 3).toString();
-        String rolee = tblUser.getValueAt(row, 4).toString();
+        String rolee = tblUser.getValueAt(row, 3).toString();
 
         id.setText(ID);
         nama.setText(namaa);
         username.setText(usn);
-        pass.setText(passw);
+        pass.setText(" ");
         role.setText(rolee);
 
         btnSimpan.setEnabled(false);
+        pass.setEnabled(false);
     }//GEN-LAST:event_tblUserMouseClicked
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
