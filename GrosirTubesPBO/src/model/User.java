@@ -34,6 +34,13 @@ public class User {
         this.pass = pass;
         this.role = role;
     }
+    
+    public User(int idUser, String namaUser, String username, String role) {
+        this.idUser = idUser;
+        this.namaUser = namaUser;
+        this.username = username;
+        this.role = role;
+    }
 
     // Setters
     public void setIdUser(int idUser) {
