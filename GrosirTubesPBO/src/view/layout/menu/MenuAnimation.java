@@ -1,5 +1,6 @@
 package view.layout.menu;
 
+import java.awt.Color;
 import java.awt.Component;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
