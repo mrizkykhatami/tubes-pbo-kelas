@@ -4,12 +4,96 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import model.User;
 import utils.Koneksi;
 import org.mindrot.jbcrypt.BCrypt; // Pastikan library sudah diimport
 
 public class UserDAO {
+    
+    public List<User> getAllUser() {
+        List<User> listUser = new ArrayList<>();
+        String sql = "SELECT * FROM User";
 
+        try (Connection conn = Koneksi.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                User k = new User();
+
+                k.setIdUser(rs.getInt("id_user"));
+                k.setNamaUser(rs.getString("nama_user"));
+                k.setUsername(rs.getString("username"));
+                k.setPass(rs.getString("pass"));
+                k.setRole(rs.getString("role"));
+                
+                listUser.add(k);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Get All User: " + e.getMessage());
+        }
+        return listUser;
+    }
+    public void updateUser(User user) {
+        String sql = "UPDATE User SET nama_user = ?, username = ?, pass = ?, role = ? WHERE id_user = ?";
+
+        try (Connection conn = Koneksi.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, user.getNamaUser());
+            ps.setString(2, user.getUsername());
+            ps.setString(3, user.getPass());
+            ps.setString(4, user.getRole());
+            ps.setInt(5, user.getIdUser());
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Error Update User: " + e.getMessage());
+        }
+    }
+    
+    public void deleteUser(int idUser) {
+        String sql = "DELETE FROM User WHERE id_user = ?";
+
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idUser);
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Error Delete User: " + e.getMessage());
+        }
+    }
+    
+    public List<User> searchUser(String keyword) {
+        List<User> listUser = new ArrayList<>();
+        String sql = "SELECT * FROM User WHERE nama_user LIKE ?";
+
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + keyword + "%"); // Pencarian partial
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User k = new User();
+                    k.setIdUser(rs.getInt("id_user"));
+                    k.setNamaUser(rs.getString("nama_user"));
+                    k.setUsername(rs.getString("username"));
+                    k.setPass(rs.getString("pass"));
+                    k.setRole(rs.getString("role"));
+                    listUser.add(k);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Search Kategori: " + e.getMessage());
+        }
+        return listUser;
+    }
     // LOGIKA LOGIN
     public User login(String username, String rawPassword) {
         // Query hanya mencari berdasarkan username, password dicek di Java
