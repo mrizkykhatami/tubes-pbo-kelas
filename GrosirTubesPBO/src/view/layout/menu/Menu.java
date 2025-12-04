@@ -29,7 +29,7 @@ public class Menu extends JComponent {
     private MigLayout layout;
     private String[][] menuItems = new String[][]{
         {"Dashboard"},
-        {"Master", "Master 1", "Master 2", "Master 3"},
+        {"Master", "Produk", "Master 2", "Master 3"},
         {"Transaksi", "Transaksi 1", "Transaksi 2"},
         {"Laporan", "Laporan 1", "Laporan 2", "Laporan 3"},
     };
