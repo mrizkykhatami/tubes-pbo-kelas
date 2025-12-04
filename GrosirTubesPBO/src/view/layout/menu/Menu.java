@@ -46,7 +46,6 @@ public class Menu extends JComponent {
         for (int i = 0; i < menuItems.length; i++) {
             addMenu(menuItems[i][0], i);
         }
-
     }
 
     private Icon getIcon(int index) {
@@ -99,7 +98,7 @@ public class Menu extends JComponent {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     if (event != null) {
-                        event.selected(index, subItem.getIndex());
+                        event.selected(index, subItem.getIndex());                       
                     }
                 }
             });
