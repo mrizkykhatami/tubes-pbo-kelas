@@ -3,22 +3,53 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package view.component;
-
+import dao.KategoriDAO;
+import dao.ProdukDAO;
+import dao.SupplierDAO;
+import java.util.List;
+import javax.swing.JOptionPane;
+import model.Kategori;
+import model.Produk;
+import model.Supplier;
 /**
  *
  * @author M Rizky Khatami
  */
 public class TambahProdukForm extends javax.swing.JDialog {
     
+    private final KategoriDAO kategoriDAO = new KategoriDAO();
+    private final SupplierDAO supplierDAO = new SupplierDAO();
+    private final ProdukDAO produkDAO = new ProdukDAO();
+
+    private List<Kategori> listKategori;
+    private List<Supplier> listSupplier;
+    
+    private Produk editingProduk;   // null = tambah, != null = edit
+    private boolean saved = false;
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TambahProdukForm.class.getName());
 
     /**
      * Creates new form TambahProdukForm
      */
+        // Konstruktor untuk TAMBAH
     public TambahProdukForm(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
+        this(parent, modal, null);
     }
+
+    // 2. Ubah Window menjadi java.awt.Frame
+    public TambahProdukForm(java.awt.Frame parent, boolean modal, Produk produkToEdit) {
+        super(parent, modal); // JDialog membutuhkan (Frame, boolean)
+        initComponents();
+        
+        this.editingProduk = produkToEdit; // Set variabel dulu
+        
+        loadComboBoxData();
+        setupMode(); // Baru jalankan setup mode
+        
+        setLocationRelativeTo(parent); // Posisi di tengah parent
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,27 +60,24 @@ public class TambahProdukForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         tambahButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        namaProdukField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        hargaField = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jSpinner1 = new javax.swing.JSpinner();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        kategoriComboBox = new javax.swing.JComboBox<>();
+        stokSpinner = new javax.swing.JSpinner();
+        supplierComboBox = new javax.swing.JComboBox<>();
+        batalButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -76,11 +104,18 @@ public class TambahProdukForm extends javax.swing.JDialog {
 
         jLabel7.setText("Supplier");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        kategoriComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        stokSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
-        jButton1.setText("BATAL");
+        supplierComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        batalButton.setText("BATAL");
+        batalButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                batalButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -105,14 +140,14 @@ public class TambahProdukForm extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(35, 35, 35)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jTextField3)
-                                    .addComponent(jComboBox1, 0, 280, Short.MAX_VALUE)
-                                    .addComponent(jSpinner1)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(namaProdukField)
+                                    .addComponent(hargaField)
+                                    .addComponent(kategoriComboBox, 0, 280, Short.MAX_VALUE)
+                                    .addComponent(stokSpinner)
+                                    .addComponent(supplierComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1)))
+                                .addComponent(batalButton)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -129,48 +164,120 @@ public class TambahProdukForm extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(namaProdukField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(kategoriComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(hargaField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(stokSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 72, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tambahButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(batalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jScrollPane1.setViewportView(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void batalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batalButtonActionPerformed
+        dispose();
+    }//GEN-LAST:event_batalButtonActionPerformed
+
     private void tambahButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahButtonActionPerformed
-        // TODO add your handling code here:
+        String namaProduk = namaProdukField.getText().trim();
+        String hargaText = hargaField.getText().trim();
+        int stok = (Integer) stokSpinner.getValue();
+
+        int indexKategori = kategoriComboBox.getSelectedIndex();
+        int indexSupplier = supplierComboBox.getSelectedIndex();
+
+        if (namaProduk.isEmpty() || hargaText.isEmpty()
+                || indexKategori < 0 || indexSupplier < 0) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Semua field wajib diisi!",
+                    "Peringatan",
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int harga;
+        try {
+            harga = Integer.parseInt(hargaText);
+        } catch (NumberFormatException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Harga harus berupa angka!",
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Kategori kategoriTerpilih = listKategori.get(indexKategori);
+        Supplier supplierTerpilih = listSupplier.get(indexSupplier);
+
+        try {
+            if (editingProduk == null) {
+                // MODE TAMBAH
+                Produk p = new Produk();
+                p.setNamaProduk(namaProduk);
+                p.setHarga(harga);
+                p.setStok(stok);
+                p.setIdKategori(kategoriTerpilih.getIdKategori());
+                p.setIdSupplier(supplierTerpilih.getIdSupplier());
+
+                produkDAO.addProduk(p);
+            } else {
+                // MODE EDIT
+                editingProduk.setNamaProduk(namaProduk);
+                editingProduk.setHarga(harga);
+                editingProduk.setStok(stok);
+                editingProduk.setIdKategori(kategoriTerpilih.getIdKategori());
+                editingProduk.setIdSupplier(supplierTerpilih.getIdSupplier());
+
+                produkDAO.updateProduk(editingProduk);
+            }
+
+            saved = true;
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Data produk berhasil disimpan!",
+                    "Informasi",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Gagal menyimpan produk: " + ex.getMessage(),
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_tambahButtonActionPerformed
 
     /**
@@ -211,9 +318,8 @@ public class TambahProdukForm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton batalButton;
+    private javax.swing.JTextField hargaField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -222,11 +328,73 @@ public class TambahProdukForm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JComboBox<String> kategoriComboBox;
+    private javax.swing.JTextField namaProdukField;
+    private javax.swing.JSpinner stokSpinner;
+    private javax.swing.JComboBox<String> supplierComboBox;
     private javax.swing.JButton tambahButton;
     // End of variables declaration//GEN-END:variables
+
+    private void loadComboBoxData() {
+        // Load kategori
+        listKategori = kategoriDAO.getAllKategori();
+        kategoriComboBox.removeAllItems();
+        for (Kategori k : listKategori) {
+            kategoriComboBox.addItem(k.getNamaKategori());
+        }
+
+        // Load supplier
+        listSupplier = supplierDAO.getAllSupplier();
+        supplierComboBox.removeAllItems();
+        for (Supplier s : listSupplier) {
+            supplierComboBox.addItem(s.getNamaSupplier());
+        }
+    }
+    
+    public boolean isSaved() {
+        return saved;
+    }
+    
+        private void setupMode() {
+        if (editingProduk == null) {
+            // Mode TAMBAH
+            jLabel2.setText("Tambah Produk");
+            tambahButton.setText("TAMBAH");
+        } else {
+            // Mode EDIT
+            jLabel2.setText("Edit Produk");
+            tambahButton.setText("SIMPAN");
+
+            // Isi field
+            namaProdukField.setText(editingProduk.getNamaProduk());
+            hargaField.setText(String.valueOf(editingProduk.getHarga()));
+            stokSpinner.setValue(editingProduk.getStok());
+
+            // Pilih kategori di combobox
+            int selectedIndexKategori = -1;
+            for (int i = 0; i < listKategori.size(); i++) {
+                if (listKategori.get(i).getIdKategori() == editingProduk.getIdKategori()) {
+                    selectedIndexKategori = i;
+                    break;
+                }
+            }
+            if (selectedIndexKategori >= 0) {
+                kategoriComboBox.setSelectedIndex(selectedIndexKategori);
+            }
+
+            // Pilih supplier di combobox
+            int selectedIndexSupplier = -1;
+            for (int i = 0; i < listSupplier.size(); i++) {
+                if (listSupplier.get(i).getIdSupplier() == editingProduk.getIdSupplier()) {
+                    selectedIndexSupplier = i;
+                    break;
+                }
+            }
+            if (selectedIndexSupplier >= 0) {
+                supplierComboBox.setSelectedIndex(selectedIndexSupplier);
+            }
+        }
+    }
+
 }

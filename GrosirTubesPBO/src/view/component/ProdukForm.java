@@ -3,18 +3,58 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package view.component;
+import dao.ProdukDAO;
+import java.awt.Frame;
+import java.awt.Window;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+import model.Produk;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.TableRowSorter;
+import java.util.regex.Pattern;
+
 
 /**
  *
  * @author M Rizky Khatami
  */
 public class ProdukForm extends javax.swing.JPanel {
-
+    private ProdukDAO produkDAO;
+    private TableRowSorter<DefaultTableModel> rowSorter;
     /**
      * Creates new form ProdukForm
      */
     public ProdukForm() {
         initComponents();
+        produkDAO = new ProdukDAO();
+        loadData();
+            
+        // === Inisialisasi TableRowSorter untuk fitur search ===
+        DefaultTableModel model = (DefaultTableModel) produkTable.getModel();
+        rowSorter = new TableRowSorter<>(model);
+        produkTable.setRowSorter(rowSorter);
+
+        // Listener supaya filter jalan saat user mengetik
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                applyFilter();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                applyFilter();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                applyFilter();
+            }
+        });
     }
 
     /**
@@ -34,7 +74,7 @@ public class ProdukForm extends javax.swing.JPanel {
         hapusButton = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        produkTable = new javax.swing.JTable();
 
         jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setText("Master > Produk");
@@ -50,10 +90,20 @@ public class ProdukForm extends javax.swing.JPanel {
         });
 
         editButton.setText("EDIT");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
 
         hapusButton.setText("HAPUS");
+        hapusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hapusButtonActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        produkTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -64,15 +114,22 @@ public class ProdukForm extends javax.swing.JPanel {
                 "ID", "Nama Produk", "Harga", "Stok", "ID Kategori", "ID Supplier"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(produkTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -124,6 +181,78 @@ public class ProdukForm extends javax.swing.JPanel {
         tambahData();
     }//GEN-LAST:event_tambahButtonActionPerformed
 
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        int viewRow = produkTable.getSelectedRow();
+
+        if (viewRow == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih dulu data produk yang akan diedit.");
+            return;
+        }
+
+        // Konversi dari view ke model index
+        int modelRow = produkTable.convertRowIndexToModel(viewRow);
+
+        // Ambil ID dari model
+        DefaultTableModel model = (DefaultTableModel) produkTable.getModel();
+        int idProduk = Integer.parseInt(model.getValueAt(modelRow, 0).toString());
+
+        // 3. Panggil method instance (bukan static)
+        Produk p = produkDAO.getProdukById(idProduk);
+        
+        if (p == null) {
+            JOptionPane.showMessageDialog(this, "Data tidak ditemukan!");
+            return;
+        }
+
+        // 4. Ambil Parent Frame untuk dilempar ke Dialog
+        Frame parent = (Frame) SwingUtilities.getWindowAncestor(this);
+        
+        TambahProdukForm dialog = new TambahProdukForm(parent, true, p);
+        dialog.setVisible(true);
+
+        if (dialog.isSaved()) {
+            loadData();
+        }
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
+        int viewRow = produkTable.getSelectedRow();
+
+        if (viewRow == -1) {
+            JOptionPane.showMessageDialog(this, 
+                "Pilih data produk yang ingin dihapus terlebih dahulu.", 
+                "Peringatan", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Konversi view index ke model index
+        int modelRow = produkTable.convertRowIndexToModel(viewRow);
+        DefaultTableModel model = (DefaultTableModel) produkTable.getModel();
+
+        // 2. Ambil ID Produk dari baris yang dipilih (Kolom ke-0)
+        String idStr = model.getValueAt(modelRow, 0).toString();
+        int idProduk = Integer.parseInt(idStr);
+
+        // 3. Tampilkan Dialog Konfirmasi (Agar tidak terhapus tidak sengaja)
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Apakah Anda yakin ingin menghapus data ini?", 
+                "Konfirmasi Hapus", 
+                JOptionPane.YES_NO_OPTION);
+
+        // 4. Jika user klik YES
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Panggil method delete dari DAO
+            produkDAO.deleteProduk(idProduk);
+            
+            // Tampilkan pesan sukses
+            JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+            
+            // 5. Refresh Tabel agar data yang dihapus hilang dari layar
+            loadData();
+        }
+    }//GEN-LAST:event_hapusButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton editButton;
@@ -132,14 +261,56 @@ public class ProdukForm extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable produkTable;
     private javax.swing.JTextField searchField;
     private javax.swing.JButton tambahButton;
     // End of variables declaration//GEN-END:variables
+    
+     private void loadData() {
+        DefaultTableModel model = (DefaultTableModel) produkTable.getModel();
+        model.setRowCount(0);  
 
-    private void tambahData() {
-        TambahProdukForm formTambah = new TambahProdukForm(null, true);
-        formTambah.setVisible(true);
-//        loadData(); // load database kategori dan supplier
+        List<Produk> list = ProdukDAO.getAllProduk();
+        for (Produk p : list) { 
+            model.addRow(new Object[]{
+                p.getIdProduk(),      // kolom "ID"
+                p.getNamaProduk(),    // kolom "Nama Produk"
+                p.getHarga(),         // kolom "Harga"
+                p.getStok(),          // kolom "Stok"
+                p.getIdKategori(),    // kolom "ID Kategori"
+                p.getIdSupplier()     // kolom "ID Supplier"
+            });
+        }
     }
+    
+    
+    private void tambahData() {
+        java.awt.Window parent = SwingUtilities.getWindowAncestor(this);
+        TambahProdukForm formTambah = new TambahProdukForm(null, true);
+        formTambah.setLocationRelativeTo(this);
+        formTambah.setVisible(true);
+
+        // kalau dialog berhasil menyimpan produk, reload tabel
+        if (formTambah.isSaved()) {
+            loadData();
+        }
+    }
+    
+    private void applyFilter() {
+        if (rowSorter == null) return;
+
+        String text = searchField.getText();
+        if (text == null) text = "";
+        text = text.trim();
+
+        if (text.isEmpty()) {
+            // kosongkan filter = tampilkan semua
+            rowSorter.setRowFilter(null);
+        } else {
+            // gunakan regex, ignore case, dan escape karakter spesial
+            String pattern = "(?i)" + Pattern.quote(text);
+            rowSorter.setRowFilter(RowFilter.regexFilter(pattern));
+        }
+    }
+
 }

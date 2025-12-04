@@ -72,7 +72,7 @@ public class Produk {
         this.namaProduk = namaProduk;
     }
 
-    public double getHarga() {
+    public int getHarga() {
         return harga;
     }
 
