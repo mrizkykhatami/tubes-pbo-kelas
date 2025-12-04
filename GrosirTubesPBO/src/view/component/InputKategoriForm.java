@@ -4,62 +4,56 @@
  */
 package view.component;
 
-import dao.SupplierDAO;
+import dao.KategoriDAO;
 import javax.swing.JOptionPane;
-import model.Supplier;
+import model.Kategori;
 /**
  *
  * @author Personal
  */
-public class InputSupplierForm extends javax.swing.JDialog {
+public class InputKategoriForm extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(InputSupplierForm.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(InputKategoriForm.class.getName());
 
-    private SupplierDAO dao;
-    private int idSupplier = 0;
+    private KategoriDAO dao;
+    private int idKategori = 0;
     /**
-     * Creates new form InputSupplierForm
+     * Creates new form InputKategoriForm
      */
-    public InputSupplierForm(java.awt.Frame parent, boolean modal) {
+    public InputKategoriForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
-        dao = new SupplierDAO();
-        
+        dao = new KategoriDAO();
         setLocationRelativeTo(parent);
     }
-    
-    public void setSupplierToEdit(Supplier s) {
-        this.idSupplier = s.getIdSupplier();
-        txtNama.setText(s.getNamaSupplier());
-        txtTelepon.setText(s.getTelepon());
-        txtAlamat.setText(s.getAlamat());
+
+    public void setKategoriToEdit(Kategori k) {
+        this.idKategori = k.getIdKategori();
+        txtNama.setText(k.getNamaKategori());
     }
     
     private void simpan() {
-        if (txtNama.getText().isEmpty() || txtTelepon.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nama dan Telepon wajib diisi!");
+        if (txtNama.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama Kategori wajib diisi!");
             return;
         }
 
         String nama = txtNama.getText();
-        String telepon = txtTelepon.getText();
-        String alamat = txtAlamat.getText();
-        Supplier s = new Supplier();
-        s.setNamaSupplier(nama);
-        s.setTelepon(telepon);
-        s.setAlamat(alamat);
+        Kategori k = new Kategori();
+        k.setNamaKategori(nama);
 
-        if (idSupplier == 0) {
-            dao.addSupplier(s);
+        if (idKategori == 0) {
+            // Mode Tambah
+            dao.addKategori(k);
         } else {
-            s.setIdSupplier(idSupplier);
-            dao.updateSupplier(s);
+            // Mode Update
+            k.setIdKategori(idKategori);
+            dao.updateKategori(k);
         }
 
-        dispose();
+        dispose(); // Tutup dialog
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -73,11 +67,6 @@ public class InputSupplierForm extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtNama = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        txtTelepon = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtAlamat = new javax.swing.JTextArea();
         btnSimpan = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
 
@@ -88,7 +77,7 @@ public class InputSupplierForm extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(242, 242, 242));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("INPUT SUPPLIER");
+        jLabel3.setText("INPUT KATEGORI");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -107,16 +96,7 @@ public class InputSupplierForm extends javax.swing.JDialog {
                 .addContainerGap(8, Short.MAX_VALUE))
         );
 
-        jLabel2.setText("Nama Supplier :");
-
-        jLabel4.setText("Telepon :");
-
-        jLabel5.setText("Alamat :");
-
-        txtAlamat.setColumns(20);
-        txtAlamat.setLineWrap(true);
-        txtAlamat.setRows(5);
-        jScrollPane1.setViewportView(txtAlamat);
+        jLabel2.setText("Nama Kategori :");
 
         btnSimpan.setText("SIMPAN");
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -139,23 +119,17 @@ public class InputSupplierForm extends javax.swing.JDialog {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel2))
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-                            .addComponent(txtTelepon)
-                            .addComponent(txtNama))
+                        .addComponent(txtNama)
                         .addGap(24, 24, 24))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(75, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,17 +141,9 @@ public class InputSupplierForm extends javax.swing.JDialog {
                     .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSimpan)
                     .addComponent(btnBatal))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
@@ -216,7 +182,7 @@ public class InputSupplierForm extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                InputSupplierForm dialog = new InputSupplierForm(new javax.swing.JFrame(), true);
+                InputKategoriForm dialog = new InputKategoriForm(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -233,12 +199,7 @@ public class InputSupplierForm extends javax.swing.JDialog {
     private javax.swing.JButton btnSimpan;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea txtAlamat;
     private javax.swing.JTextField txtNama;
-    private javax.swing.JTextField txtTelepon;
     // End of variables declaration//GEN-END:variables
 }
