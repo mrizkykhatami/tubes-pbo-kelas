@@ -4,11 +4,23 @@
  */
 package main;
 
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTNightOwlIJTheme;
+import view.component.LoginFrame;
+
 /**
  *
  * @author M Rizky Khatami
  */
 public class Main {
-    
+    public static void main(String[] args) {
+        FlatLightLaf.setup();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                // 2. Buat dan tampilkan LandingFrame Anda
+                new LoginFrame().setVisible(true);
+            }
+        });
+    }
 }
 
