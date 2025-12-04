@@ -29,7 +29,7 @@ public class LoginFrame extends javax.swing.JFrame {
         String password = new String(passField.getPassword());
 
         if (username.isEmpty() || password.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Gmail dan Password tidak boleh kosong!", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Username dan Password tidak boleh kosong!", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -44,7 +44,7 @@ public class LoginFrame extends javax.swing.JFrame {
             mainMenu.setVisible(true);
             this.dispose();
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Gmail atau Password salah.", "Login Gagal", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Username atau Password salah.", "Login Gagal", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }    
     
