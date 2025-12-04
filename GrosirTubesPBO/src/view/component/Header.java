@@ -38,6 +38,8 @@ public class Header extends javax.swing.JPanel {
         logoutButton = new javax.swing.JButton();
         namaUserLabel = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(204, 255, 204));
+
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(237, 237, 237));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/component/logo.png"))); // NOI18N
