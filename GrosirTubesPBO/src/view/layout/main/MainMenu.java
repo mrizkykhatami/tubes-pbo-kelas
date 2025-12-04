@@ -3,6 +3,7 @@ package view.layout.main;
 import view.component.DefaultForm;
 import view.component.KategoriForm;
 import view.component.SupplierForm;
+import view.component.PenjualanForm;
 import view.component.HomeForm;
 import java.awt.Component;
 import view.layout.menu.MenuEvent;
@@ -17,6 +18,7 @@ import view.component.ProdukForm;
  */
 public class MainMenu extends javax.swing.JFrame {
 
+    private User userLogin;
     /**
      * Creates new form Main
      */
@@ -66,6 +68,9 @@ public class MainMenu extends javax.swing.JFrame {
     
     public MainMenu(User user) {
         initComponents();
+        
+        this.userLogin = user;
+        
         header1.setNamaUserLabel(user.getNamaUser());
         menu1.setRole(user.getRole()); 
         
@@ -91,7 +96,7 @@ public class MainMenu extends javax.swing.JFrame {
                     showForm(new DefaultForm("Transaksi 1")); // ganti panel
                 }
                 else if(index == 2 && subIndex == 2){
-                    showForm(new DefaultForm("Transaksi 2")); // ganti panel
+                    showForm(new PenjualanForm(userLogin)); // ganti panel
                 }
                 else if(index == 3 && subIndex == 1){
                     showForm(new DefaultForm("Laporan 1")); // ganti panel
