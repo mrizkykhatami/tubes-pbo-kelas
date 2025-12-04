@@ -13,7 +13,7 @@ public class Produk {
     private int idKategori;
     private int idSupplier;
     private String namaProduk;
-    private double harga;
+    private int harga;
     private int stok;
 
     // Constructor Kosong
@@ -21,7 +21,7 @@ public class Produk {
     }
 
     // Constructor Lengkap (Untuk mengambil data dari DB)
-    public Produk(int idProduk, int idKategori, int idSupplier, String namaProduk, double harga, int stok) {
+    public Produk(int idProduk, int idKategori, int idSupplier, String namaProduk, int harga, int stok) {
         this.idProduk = idProduk;
         this.idKategori = idKategori;
         this.idSupplier = idSupplier;
@@ -31,7 +31,7 @@ public class Produk {
     }
 
     // Constructor untuk Insert
-    public Produk(int idKategori, int idSupplier, String namaProduk, double harga, int stok) {
+    public Produk(int idKategori, int idSupplier, String namaProduk, int harga, int stok) {
         this.idKategori = idKategori;
         this.idSupplier = idSupplier;
         this.namaProduk = namaProduk;
@@ -72,11 +72,11 @@ public class Produk {
         this.namaProduk = namaProduk;
     }
 
-    public double getHarga() {
+    public int getHarga() {
         return harga;
     }
 
-    public void setHarga(double harga) {
+    public void setHarga(int harga) {
         this.harga = harga;
     }
 

@@ -4,34 +4,33 @@
  */
 package view.component;
 
-import dao.KategoriDAO;
+import dao.SupplierDAO;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import model.Kategori;
+import model.Supplier;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 /**
  *
  * @author Personal
  */
-public class KategoriForm extends javax.swing.JPanel {
+public class SupplierForm extends javax.swing.JPanel {
 
-    private KategoriDAO dao;
+    private SupplierDAO dao;
     private DefaultTableModel tableModel;
     
     /**
-     * Creates new form KategoriForm
+     * Creates new form SupplierForm
      */
-    public KategoriForm() {
+    public SupplierForm() {
         initComponents();
         
-        dao = new KategoriDAO();
+        dao = new SupplierDAO();
         
-        // Setup Kolom Tabel
-        String[] judul = {"ID", "Nama Kategori"};
+        String[] judul = {"ID", "Nama Supplier", "Telepon", "Alamat"};
         tableModel = new DefaultTableModel(judul, 0);
-        tblKategori.setModel(tableModel);
+        tblSupplier.setModel(tableModel);
         
         loadData();
     }
@@ -39,56 +38,44 @@ public class KategoriForm extends javax.swing.JPanel {
     private void loadData() {
         tableModel.setRowCount(0);
         
-        List<Kategori> list = dao.getAllKategori();
+        List<Supplier> list = dao.getAllSupplier();
         
-        for (Kategori k : list) {
+        for (Supplier s : list) {
             Object[] row = {
-                k.getIdKategori(),
-                k.getNamaKategori()
-            };
-            tableModel.addRow(row);
-        }
-    }
-    
-    private void cariData(String keyword) {
-        tableModel.setRowCount(0);
-        
-        List<Kategori> list = dao.searchKategori(keyword);
-        
-        for (Kategori k : list) {
-            Object[] row = {
-                k.getIdKategori(),
-                k.getNamaKategori()
+                s.getIdSupplier(),
+                s.getNamaSupplier(),
+                s.getTelepon(),
+                s.getAlamat()
             };
             tableModel.addRow(row);
         }
     }
     
     private void edit() {
-        int row = tblKategori.getSelectedRow();
+        int row = tblSupplier.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Pilih data yang akan diedit!");
             return;
         }
 
-        // Ambil data dari tabel
-        int id = Integer.parseInt(tblKategori.getValueAt(row, 0).toString());
-        String nama = tblKategori.getValueAt(row, 1).toString();
+        int id = Integer.parseInt(tblSupplier.getValueAt(row, 0).toString());
+        String nama = tblSupplier.getValueAt(row, 1).toString();
+        String telepon = tblSupplier.getValueAt(row, 2).toString();
+        String alamat = tblSupplier.getValueAt(row, 3).toString();
         
-        Kategori k = new Kategori(id, nama);
+        Supplier s = new Supplier(id, nama, telepon, alamat);
 
-        // Ambil Parent Frame agar Dialog bisa muncul sebagai Modal
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        InputKategoriForm dialog = new InputKategoriForm(parentFrame, true);
+        InputSupplierForm dialog = new InputSupplierForm(parentFrame, true);
         
-        dialog.setKategoriToEdit(k); // Kirim data ke dialog
+        dialog.setSupplierToEdit(s); 
         dialog.setVisible(true);
 
-        loadData(); // Refresh tabel setelah dialog tutup
+        loadData();
     }
     
     private void hapus() {
-        int row = tblKategori.getSelectedRow();
+        int row = tblSupplier.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus!");
             return;
@@ -96,9 +83,25 @@ public class KategoriForm extends javax.swing.JPanel {
         
         int confirm = JOptionPane.showConfirmDialog(this, "Hapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            int id = Integer.parseInt(tblKategori.getValueAt(row, 0).toString());
-            dao.deleteKategori(id);
+            int id = Integer.parseInt(tblSupplier.getValueAt(row, 0).toString());
+            dao.deleteSupplier(id);
             loadData();
+        }
+    }
+    
+    private void cariData(String keyword) {
+        tableModel.setRowCount(0);
+        
+        List<Supplier> list = dao.searchSupplier(keyword);
+        
+        for (Supplier s : list) {
+            Object[] row = {
+                s.getIdSupplier(),
+                s.getNamaSupplier(),
+                s.getTelepon(),
+                s.getAlamat()
+            };
+            tableModel.addRow(row);
         }
     }
     
@@ -111,23 +114,26 @@ public class KategoriForm extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnCari = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblKategori = new javax.swing.JTable();
-        txtCari = new javax.swing.JTextField();
-        btnHapus = new javax.swing.JButton();
-        btnPerbarui = new javax.swing.JButton();
-        btnTambah = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        btnTambah = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblSupplier = new javax.swing.JTable();
+        btnPerbarui = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
+        btnCari = new javax.swing.JButton();
+        txtCari = new javax.swing.JTextField();
 
-        btnCari.setText("CARI");
-        btnCari.addActionListener(new java.awt.event.ActionListener() {
+        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        jLabel3.setText("DATA SUPPLIER");
+
+        btnTambah.setText("TAMBAH");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCariActionPerformed(evt);
+                btnTambahActionPerformed(evt);
             }
         });
 
-        tblKategori.setModel(new javax.swing.table.DefaultTableModel(
+        tblSupplier.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -138,14 +144,7 @@ public class KategoriForm extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblKategori);
-
-        btnHapus.setText("HAPUS");
-        btnHapus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHapusActionPerformed(evt);
-            }
-        });
+        jScrollPane1.setViewportView(tblSupplier);
 
         btnPerbarui.setText("PERBARUI");
         btnPerbarui.addActionListener(new java.awt.event.ActionListener() {
@@ -154,15 +153,19 @@ public class KategoriForm extends javax.swing.JPanel {
             }
         });
 
-        btnTambah.setText("TAMBAH");
-        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+        btnHapus.setText("HAPUS");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTambahActionPerformed(evt);
+                btnHapusActionPerformed(evt);
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        jLabel3.setText("DATA KATEGORI");
+        btnCari.setText("CARI");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -206,25 +209,25 @@ public class KategoriForm extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        String keyword = txtCari.getText();
-        cariData(keyword);
-    }//GEN-LAST:event_btnCariActionPerformed
-
-    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        hapus();
-    }//GEN-LAST:event_btnHapusActionPerformed
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        InputSupplierForm dialog = new InputSupplierForm(parentFrame, true);
+        dialog.setVisible(true);
+        loadData();
+    }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnPerbaruiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiActionPerformed
         edit();
     }//GEN-LAST:event_btnPerbaruiActionPerformed
 
-    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        InputKategoriForm dialog = new InputKategoriForm(parentFrame, true);
-        dialog.setVisible(true);
-        loadData();
-    }//GEN-LAST:event_btnTambahActionPerformed
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        hapus();
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        String keyword = txtCari.getText();
+        cariData(keyword);
+    }//GEN-LAST:event_btnCariActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -234,7 +237,7 @@ public class KategoriForm extends javax.swing.JPanel {
     private javax.swing.JButton btnTambah;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblKategori;
+    private javax.swing.JTable tblSupplier;
     private javax.swing.JTextField txtCari;
     // End of variables declaration//GEN-END:variables
 }

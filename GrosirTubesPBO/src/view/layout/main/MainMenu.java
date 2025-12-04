@@ -2,11 +2,14 @@ package view.layout.main;
 
 import view.component.DefaultForm;
 import view.component.KategoriForm;
+import view.component.SupplierForm;
 import view.component.HomeForm;
 import java.awt.Component;
 import view.layout.menu.MenuEvent;
 import model.User;
 import view.component.UserForm;
+import view.component.ProdukForm;
+
 
 /**
  *
@@ -27,7 +30,7 @@ public class MainMenu extends javax.swing.JFrame {
                     showForm(new HomeForm());
                 } 
                 else if(index == 1 && subIndex == 1){
-                    showForm(new DefaultForm("Master 1")); // ganti panel
+                    showForm(new ProdukForm()); // ganti panel
                 }
                 else if(index == 1 && subIndex == 2){
                     showForm(new DefaultForm("Master 2")); // ganti panel
@@ -73,10 +76,10 @@ public class MainMenu extends javax.swing.JFrame {
                     showForm(new HomeForm());
                 } 
                 else if(index == 1 && subIndex == 1){
-                    showForm(new DefaultForm("Master 1")); // ganti panel
+                    showForm(new ProdukForm()); // ganti panel
                 }
                 else if(index == 1 && subIndex == 2){
-                    showForm(new DefaultForm("Master 2")); // ganti panel
+                    showForm(new SupplierForm()); // ganti panel
                 }
                 else if(index == 1 && subIndex == 3){
                     showForm(new KategoriForm()); // ganti panel

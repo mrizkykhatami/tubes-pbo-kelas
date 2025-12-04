@@ -21,7 +21,7 @@ import utils.Koneksi;
 public class ProdukDAO {
 
     // 1. READ (Ambil semua data produk)
-    public List<Produk> getAllProduk() {
+    public static List<Produk> getAllProduk() {
         List<Produk> listProduk = new ArrayList<>();
         String sql = "SELECT * FROM produk";
 
@@ -35,7 +35,7 @@ public class ProdukDAO {
                 p.setIdKategori(rs.getInt("id_kategori"));
                 p.setIdSupplier(rs.getInt("id_supplier"));
                 p.setNamaProduk(rs.getString("nama_produk"));
-                p.setHarga(rs.getDouble("harga"));
+                p.setHarga(rs.getInt("harga"));
                 p.setStok(rs.getInt("stok"));
                 
                 listProduk.add(p);
@@ -120,7 +120,7 @@ public class ProdukDAO {
                     p.setIdKategori(rs.getInt("id_kategori"));
                     p.setIdSupplier(rs.getInt("id_supplier"));
                     p.setNamaProduk(rs.getString("nama_produk"));
-                    p.setHarga(rs.getDouble("harga"));
+                    p.setHarga(rs.getInt("harga"));
                     p.setStok(rs.getInt("stok"));
                     
                     listProduk.add(p);
@@ -131,4 +131,30 @@ public class ProdukDAO {
         }
         return listProduk;
     }
+    
+    public static Produk getProdukById(int idProduk) {
+        String sql = "SELECT * FROM produk WHERE id_produk = ?";
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idProduk);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Produk p = new Produk();
+                    p.setIdProduk(rs.getInt("id_produk"));
+                    p.setIdKategori(rs.getInt("id_kategori"));
+                    p.setIdSupplier(rs.getInt("id_supplier"));
+                    p.setNamaProduk(rs.getString("nama_produk"));
+                    p.setHarga(rs.getInt("harga"));
+                    p.setStok(rs.getInt("stok"));
+                    return p;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Get Produk By Id: " + e.getMessage());
+        }
+        return null;
+    }
+
 }
