@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import java.sql.Connection;
@@ -14,10 +10,6 @@ import java.util.List;
 import model.Produk;
 import utils.Koneksi;
 
-/**
- *
- * @author Personal
- */
 public class ProdukDAO {
 
     // 1. READ (Ambil semua data produk)
@@ -45,10 +37,37 @@ public class ProdukDAO {
         }
         return listProduk;
     }
+    
+    // Method untuk mengambil produk dengan JOIN supplier
+    public static List<Produk> getAllProdukWithSupplier() {
+        List<Produk> listProduk = new ArrayList<>();
+        String sql = "SELECT p.*, s.nama_supplier FROM produk p " +
+                     "LEFT JOIN supplier s ON p.id_supplier = s.id_supplier";
+
+        try (Connection conn = Koneksi.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Produk p = new Produk();
+                p.setIdProduk(rs.getInt("id_produk"));
+                p.setIdKategori(rs.getInt("id_kategori"));
+                p.setIdSupplier(rs.getInt("id_supplier"));
+                p.setNamaProduk(rs.getString("nama_produk"));
+                p.setHarga(rs.getInt("harga"));
+                p.setStok(rs.getInt("stok"));
+                p.setNamaSupplier(rs.getString("nama_supplier"));
+                
+                listProduk.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Get All Produk With Supplier: " + e.getMessage());
+        }
+        return listProduk;
+    }
 
     // 2. CREATE (Tambah produk baru)
     public void addProduk(Produk produk) {
-        // id_produk auto increment, create_at/update_at otomatis
         String sql = "INSERT INTO produk (id_kategori, id_supplier, nama_produk, harga, stok) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = Koneksi.getConnection();
@@ -57,7 +76,7 @@ public class ProdukDAO {
             ps.setInt(1, produk.getIdKategori());
             ps.setInt(2, produk.getIdSupplier());
             ps.setString(3, produk.getNamaProduk());
-            ps.setDouble(4, produk.getHarga());
+            ps.setInt(4, produk.getHarga());
             ps.setInt(5, produk.getStok());
             
             ps.executeUpdate();
@@ -77,9 +96,9 @@ public class ProdukDAO {
             ps.setInt(1, produk.getIdKategori());
             ps.setInt(2, produk.getIdSupplier());
             ps.setString(3, produk.getNamaProduk());
-            ps.setDouble(4, produk.getHarga());
+            ps.setInt(4, produk.getHarga());
             ps.setInt(5, produk.getStok());
-            ps.setInt(6, produk.getIdProduk()); // Parameter WHERE
+            ps.setInt(6, produk.getIdProduk());
             
             ps.executeUpdate();
             
@@ -132,8 +151,42 @@ public class ProdukDAO {
         return listProduk;
     }
     
+    // Method search dengan JOIN supplier
+    public List<Produk> searchProdukWithSupplier(String keyword) {
+        List<Produk> listProduk = new ArrayList<>();
+        String sql = "SELECT p.*, s.nama_supplier FROM produk p " +
+                     "LEFT JOIN supplier s ON p.id_supplier = s.id_supplier " +
+                     "WHERE p.nama_produk LIKE ?";
+
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + keyword + "%");
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Produk p = new Produk();
+                    p.setIdProduk(rs.getInt("id_produk"));
+                    p.setIdKategori(rs.getInt("id_kategori"));
+                    p.setIdSupplier(rs.getInt("id_supplier"));
+                    p.setNamaProduk(rs.getString("nama_produk"));
+                    p.setHarga(rs.getInt("harga"));
+                    p.setStok(rs.getInt("stok"));
+                    p.setNamaSupplier(rs.getString("nama_supplier"));
+                    
+                    listProduk.add(p);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Search Produk With Supplier: " + e.getMessage());
+        }
+        return listProduk;
+    }
+    
     public static Produk getProdukById(int idProduk) {
-        String sql = "SELECT * FROM produk WHERE id_produk = ?";
+        String sql = "SELECT p.*, s.nama_supplier FROM produk p " +
+                     "LEFT JOIN supplier s ON p.id_supplier = s.id_supplier " +
+                     "WHERE p.id_produk = ?";
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -148,6 +201,7 @@ public class ProdukDAO {
                     p.setNamaProduk(rs.getString("nama_produk"));
                     p.setHarga(rs.getInt("harga"));
                     p.setStok(rs.getInt("stok"));
+                    p.setNamaSupplier(rs.getString("nama_supplier"));
                     return p;
                 }
             }
@@ -156,5 +210,4 @@ public class ProdukDAO {
         }
         return null;
     }
-
 }
