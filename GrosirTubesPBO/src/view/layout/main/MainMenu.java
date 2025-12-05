@@ -6,6 +6,7 @@ import view.component.SupplierForm;
 import view.component.PenjualanForm;
 import view.component.LaporanPembelianPenjualanForm;
 import view.component.HomeForm;
+import view.component.DashboardForm;
 import java.awt.Component;
 import view.layout.menu.MenuEvent;
 import model.User;
@@ -31,7 +32,7 @@ public class MainMenu extends javax.swing.JFrame {
             @Override
             public void selected(int index, int subIndex) {
                 if (index == 0) {
-                    showForm(new HomeForm());
+                    showForm(new DashboardForm());
                 } 
                 else if(index == 1 && subIndex == 1){
                     showForm(new ProdukForm()); // ganti panel
@@ -80,7 +81,7 @@ public class MainMenu extends javax.swing.JFrame {
             @Override
             public void selected(int index, int subIndex) {
                 if (index == 0) {
-                    showForm(new HomeForm());
+                    showForm(new DashboardForm());
                 } 
                 else if(index == 1 && subIndex == 1){
                     showForm(new ProdukForm()); // ganti panel
