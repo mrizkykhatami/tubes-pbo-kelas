@@ -58,12 +58,12 @@
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtNama" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtNama" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtTelepon" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtTelepon" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -72,8 +72,8 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnSimpan" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnBatal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnSimpan" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="btnBatal" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="30" max="32767" attributes="0"/>
           </Group>
