@@ -138,6 +138,7 @@ public class UserDAO {
 
     // LOGIKA REGISTER
     public boolean register(User user) {
+        System.out.println("DAO REGISTER TERPANGGIL");
         // Cek dulu apakah username sudah ada (Opsional, tapi disarankan agar pesan error lebih jelas)
         if (isUsernameExists(user.getUsername())) {
             System.err.println("Registrasi gagal: Username " + user.getUsername() + " sudah digunakan.");
@@ -151,23 +152,18 @@ public class UserDAO {
         String hashedPassword = BCrypt.hashpw(user.getPass(), BCrypt.gensalt());
 
         try (Connection conn = Koneksi.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getNamaUser());
             ps.setString(2, user.getUsername());
             ps.setString(3, hashedPassword); // Simpan password yang sudah di-hash
-            
-            // Set default role jika user.getRole() null, atau ambil dari object user
-            String role = (user.getRole() == null || user.getRole().isEmpty()) ? "user" : user.getRole();
-            ps.setString(4, role); 
-
+            ps.setString(4, user.getRole());
             int affectedRows = ps.executeUpdate();
             
             return affectedRows > 0;
 
         } catch (SQLException e) {
             System.err.println("Error saat registrasi: " + e.getMessage());
-            e.printStackTrace();
             return false;
         }
     }
