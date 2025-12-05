@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author Personal
- */
 public class Produk {
     private int idProduk;
     private int idKategori;
@@ -15,6 +7,8 @@ public class Produk {
     private String namaProduk;
     private int harga;
     private int stok;
+    
+    private String namaSupplier;
 
     // Constructor Kosong
     public Produk() {
@@ -28,6 +22,17 @@ public class Produk {
         this.namaProduk = namaProduk;
         this.harga = harga;
         this.stok = stok;
+    }
+    
+    // Constructor dengan nama supplier
+    public Produk(int idProduk, int idKategori, int idSupplier, String namaProduk, int harga, int stok, String namaSupplier) {
+        this.idProduk = idProduk;
+        this.idKategori = idKategori;
+        this.idSupplier = idSupplier;
+        this.namaProduk = namaProduk;
+        this.harga = harga;
+        this.stok = stok;
+        this.namaSupplier = namaSupplier;
     }
 
     // Constructor untuk Insert
@@ -86,5 +91,13 @@ public class Produk {
 
     public void setStok(int stok) {
         this.stok = stok;
+    }
+    
+    public String getNamaSupplier() {
+        return namaSupplier;
+    }
+
+    public void setNamaSupplier(String namaSupplier) {
+        this.namaSupplier = namaSupplier;
     }
 }

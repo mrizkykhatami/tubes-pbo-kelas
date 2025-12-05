@@ -22,38 +22,85 @@ public class PilihProdukDialog extends javax.swing.JDialog {
     
     // Variabel untuk menyimpan produk yang dipilih
     public Produk produkTerpilih = null;
+    
+    // Mode: true = untuk pembelian (tampilkan supplier), false = untuk penjualan (tanpa supplier)
+    private boolean modePembelian;
     /**
      * Creates new form PilihProdukDialog
      */
+//    public PilihProdukDialog(java.awt.Frame parent, boolean modal) {
+//        super(parent, modal);
+//        initComponents();
+//        
+//        dao = new ProdukDAO();
+//        String[] judul = {"ID", "Nama Produk", "Harga", "Stok"};
+//        tableModel = new DefaultTableModel(judul, 0);
+//        tblProduk.setModel(tableModel);
+//        
+//        setLocationRelativeTo(parent);
+//        loadData("");
+//    }
+    
+    // Constructor untuk Penjualan (tanpa supplier)
     public PilihProdukDialog(java.awt.Frame parent, boolean modal) {
+        this(parent, modal, false);
+    }
+    
+    // Constructor dengan parameter mode
+    public PilihProdukDialog(java.awt.Frame parent, boolean modal, boolean modePembelian) {
         super(parent, modal);
+        this.modePembelian = modePembelian;
         initComponents();
         
         dao = new ProdukDAO();
-        String[] judul = {"ID", "Nama Produk", "Harga", "Stok"};
-        tableModel = new DefaultTableModel(judul, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        tblProduk.setModel(tableModel);
         
+        if (modePembelian) {
+            // Untuk pembelian: ID, Nama Produk, Stok, Nama Supplier
+            String[] judul = {"ID", "Nama Produk", "Stok", "Nama Supplier"};
+            tableModel = new DefaultTableModel(judul, 0);
+        } else {
+            // Untuk penjualan: ID, Nama Produk, Harga, Stok
+            String[] judul = {"ID", "Nama Produk", "Harga", "Stok"};
+            tableModel = new DefaultTableModel(judul, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+        }
+        
+        tblProduk.setModel(tableModel);
         setLocationRelativeTo(parent);
         loadData("");
     }
 
     private void loadData(String keyword) {
         tableModel.setRowCount(0);
-        List<Produk> list = dao.searchProduk(keyword); // Pastikan ProdukDAO punya method searchProduk
+        List<Produk> list;
+        
+        if (modePembelian) {
+            list = dao.searchProdukWithSupplier(keyword);
+        } else {
+            list = dao.searchProduk(keyword);
+        }
         
         for (Produk p : list) {
-            Object[] row = {
-                p.getIdProduk(),
-                p.getNamaProduk(),
-                p.getHarga(),
-                p.getStok()
-            };
+            Object[] row;
+            if (modePembelian) {
+                row = new Object[]{
+                    p.getIdProduk(),
+                    p.getNamaProduk(),
+                    p.getStok(),
+                    p.getNamaSupplier()
+                };
+            } else {
+                row = new Object[]{
+                    p.getIdProduk(),
+                    p.getNamaProduk(),
+                    p.getHarga(),
+                    p.getStok()
+                };
+            }
             tableModel.addRow(row);
         }
     }
@@ -66,15 +113,9 @@ public class PilihProdukDialog extends javax.swing.JDialog {
         }
 
         int id = Integer.parseInt(tblProduk.getValueAt(row, 0).toString());
-        String nama = tblProduk.getValueAt(row, 1).toString();
-        int harga = Integer.parseInt(tblProduk.getValueAt(row, 2).toString());
-        int stok = Integer.parseInt(tblProduk.getValueAt(row, 3).toString());
         
-        produkTerpilih = new Produk();
-        produkTerpilih.setIdProduk(id);
-        produkTerpilih.setNamaProduk(nama);
-        produkTerpilih.setHarga(harga);
-        produkTerpilih.setStok(stok);
+        // Ambil data lengkap dari database
+        produkTerpilih = ProdukDAO.getProdukById(id);
         
         dispose();
     }

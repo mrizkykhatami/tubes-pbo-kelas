@@ -31,8 +31,9 @@ public class Menu extends JComponent {
     private String[][] menuItems = new String[][]{
         {"Dashboard"},
         {"Master", "Produk", "Supplier", "Kategori", "User"},
-        {"Transaksi", "Transaksi 1", "Penjualan"},
+        {"Transaksi", "Restock Produk", "Penjualan"},
         {"Laporan", "Laporan 1", "Laporan Penjualan", "Laporan 3"},
+
     };
 
     public Menu() {

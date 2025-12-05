@@ -97,7 +97,7 @@ public class InputProdukForm extends javax.swing.JDialog {
 
         kategoriComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        stokSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        stokSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         supplierComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -245,7 +245,23 @@ public class InputProdukForm extends javax.swing.JDialog {
                     javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        if (harga < 1) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Harga minimal RP 1!",
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
+        if (stok < 0) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Stok tidak boleh kurang dari 0!",
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         Kategori kategoriTerpilih = listKategori.get(indexKategori);
         Supplier supplierTerpilih = listSupplier.get(indexSupplier);
 

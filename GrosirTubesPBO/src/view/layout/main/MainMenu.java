@@ -9,6 +9,7 @@ import view.component.HomeForm;
 import java.awt.Component;
 import view.layout.menu.MenuEvent;
 import model.User;
+import view.component.PembelianForm;
 import view.component.UserForm;
 import view.component.ProdukForm;
 
@@ -94,7 +95,7 @@ public class MainMenu extends javax.swing.JFrame {
                     showForm(new UserForm()); // ganti panel
                 }
                 else if(index == 2 && subIndex == 1){
-                    showForm(new DefaultForm("Transaksi 1")); // ganti panel
+                    showForm(new PembelianForm(userLogin)); // ganti panel
                 }
                 else if(index == 2 && subIndex == 2){
                     showForm(new PenjualanForm(userLogin)); // ganti panel

@@ -9,6 +9,9 @@ public class DetailPembelian {
     private int subTotal;
     private String createAt;
     private String updateAt;
+    
+    private String namaProduk;
+    private String namaSupplier;
 
     public DetailPembelian(){
         
@@ -21,8 +24,17 @@ public class DetailPembelian {
         this.jumlah = jumlah;
         this.hargaSatuan = hargaSatuan;
         this.subTotal = subTotal;
-        this.createAt=createAt;
-        this.updateAt=updateAt;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
+    }
+    
+    public DetailPembelian(int idProduk, String namaProduk, String namaSupplier, int jumlah, int hargaSatuan, int subTotal) {
+        this.idProduk = idProduk;
+        this.namaProduk = namaProduk;
+        this.namaSupplier = namaSupplier;
+        this.jumlah = jumlah;
+        this.hargaSatuan = hargaSatuan;
+        this.subTotal = subTotal;
     }
 
     // Setter
@@ -50,30 +62,42 @@ public class DetailPembelian {
     public void setUpdateAt(String updateAt){
         this.updateAt = updateAt;
     }
-    // getter
-    public int setIdDetailPembelian(){
+    public void setNamaProduk(String namaProduk){
+        this.namaProduk = namaProduk;
+    }
+    public void setNamaSupplier(String namaSupplier){
+        this.namaSupplier = namaSupplier;
+    }
+    
+    // Getter
+    public int getIdDetailPembelian(){
         return this.idDetailPembelian;
     }
-    public int setIdPembelian(){
+    public int getIdPembelian(){
         return this.idPembelian;
     }
-    public int setIdProduk(){
+    public int getIdProduk(){
         return this.idProduk;
     }
-    public int setJumlah(){
+    public int getJumlah(){
         return this.jumlah;
     }
-    public int setHargaSatuan(){
+    public int getHargaSatuan(){
         return this.hargaSatuan;
     }
-    public int setSubTotal(){
+    public int getSubTotal(){
         return this.subTotal;
     }
-    public String setCreateAt(){
+    public String getCreateAt(){
         return this.createAt;
     }
-    public String setUpdateAt(){
+    public String getUpdateAt(){
         return this.updateAt;
     }
-
+    public String getNamaProduk(){
+        return this.namaProduk;
+    }
+    public String getNamaSupplier(){
+        return this.namaSupplier;
+    }
 }
