@@ -153,10 +153,13 @@ public class LaporanPenjualanForm extends javax.swing.JPanel {
         }
 
         int idPenjualan = Integer.parseInt(tblLaporan.getValueAt(row, 0).toString());
+        
+        String tanggalLengkap = tblLaporan.getValueAt(row, 1).toString();
 
         JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
         LaporanPenjualanDialog dialog = new LaporanPenjualanDialog(parent, true);
-        dialog.tampilkanDetail(idPenjualan);
+        
+        dialog.tampilkanDetail(idPenjualan, tanggalLengkap);
     }//GEN-LAST:event_btnDetailActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed

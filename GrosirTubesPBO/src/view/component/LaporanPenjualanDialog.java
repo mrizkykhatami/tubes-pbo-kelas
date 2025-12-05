@@ -41,8 +41,8 @@ public class LaporanPenjualanDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
     }
     
-    public void tampilkanDetail(int idPenjualan) {
-        lblJudul.setText("DETAIL TRANSAKSI #" + idPenjualan);
+    public void tampilkanDetail(int idPenjualan, String tanggal) {
+        lblJudul.setText("WAKTU TRANSAKSI: " + tanggal);
         loadData(idPenjualan);
         this.setVisible(true);
     }
