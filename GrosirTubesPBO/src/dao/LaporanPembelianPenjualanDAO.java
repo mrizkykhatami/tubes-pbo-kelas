@@ -12,18 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 import model.DetailPenjualan;
 import model.Penjualan;
+import model.DetailPembelian;
+import model.Pembelian;
 import utils.Koneksi;
 /**
  *
  * @author Personal
  */
-public class LaporanPenjualanDAO {
+public class LaporanPembelianPenjualanDAO {
     public List<Penjualan> getAllPenjualan() {
         List<Penjualan> list = new ArrayList<>();
         // Join dengan tabel user untuk dapat nama kasir
         String sql = "SELECT p.*, u.nama_user FROM penjualan p " +
                      "JOIN user u ON p.id_user = u.id_user " +
-                     "ORDER BY p.tanggal ASC";
+                     "ORDER BY p.tanggal DESC";
 
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -46,7 +48,36 @@ public class LaporanPenjualanDAO {
         return list;
     }
     
-    public List<DetailPenjualan> getDetailTransaksi(int idPenjualan) {
+    public List<Pembelian> getAllPembelian() {
+        List<Pembelian> list = new ArrayList<>();
+        // Join dengan tabel user untuk dapat nama kasir
+        String sql = "SELECT p.*, u.nama_user FROM pembelian p " +
+                     "JOIN user u ON p.id_user = u.id_user " +
+                     "ORDER BY p.tanggal DESC";
+
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Pembelian p = new Pembelian();
+                p.setIdPembelian(rs.getInt("id_pembelian"));
+                p.setIdUser(rs.getInt("id_user"));
+                p.setTanggal(rs.getString("tanggal"));
+                p.setTotalHarga(rs.getInt("total_harga"));
+                
+                p.setNamaUser(rs.getString("nama_user"));
+                p.setIdSupplier(rs.getInt("id_supplier"));
+                
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Get Laporan: " + e.getMessage());
+        }
+        return list;
+    }
+    
+    public List<DetailPenjualan> getDetailTransaksiPenjualan(int idPenjualan) {
         List<DetailPenjualan> list = new ArrayList<>();
         // Join dengan produk untuk dapat nama produk
         String sql = "SELECT dp.*, pr.nama_produk FROM detail_penjualan dp " +
@@ -66,6 +97,36 @@ public class LaporanPenjualanDAO {
                     dp.setJumlah(rs.getInt("jumlah"));
                     dp.setHargaSatuan(rs.getInt("harga_satuan"));
                     dp.setSubtotal(rs.getInt("subtotal"));
+                    
+                    list.add(dp);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Get Detail: " + e.getMessage());
+        }
+        return list;
+    }
+    
+    public List<DetailPembelian> getDetailTransaksiPembelian(int idPembelian) {
+        List<DetailPembelian> list = new ArrayList<>();
+        // Join dengan produk untuk dapat nama produk
+        String sql = "SELECT dp.*, pr.nama_produk FROM detail_pembelian dp " +
+                     "JOIN produk pr ON dp.id_produk = pr.id_produk " +
+                     "WHERE dp.id_pembelian = ?";
+
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, idPembelian);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    DetailPembelian dp = new DetailPembelian();
+                    dp.setIdProduk(rs.getInt("id_produk"));
+                    dp.setNamaProduk(rs.getString("nama_produk"));
+                    dp.setJumlah(rs.getInt("jumlah"));
+                    dp.setHargaSatuan(rs.getInt("harga_satuan"));
+                    dp.setSubTotal(rs.getInt("subtotal"));
                     
                     list.add(dp);
                 }

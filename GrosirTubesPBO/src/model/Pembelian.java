@@ -11,6 +11,8 @@ public class Pembelian {
     private String createAt;
     private String updateAt;
     
+    private String namaUser;
+    
     // Untuk menyimpan list detail pembelian
     private List<DetailPembelian> listDetail;
     
@@ -51,6 +53,14 @@ public class Pembelian {
     
     public void setIdUser(int idUser) {
         this.idUser = idUser;
+    }
+    
+    public String getNamaUser() {
+        return namaUser;
+    }
+    
+    public void setNamaUser(String namaUser) {
+        this.namaUser = namaUser;
     }
     
     public int getIdSupplier() {

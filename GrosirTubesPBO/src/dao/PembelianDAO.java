@@ -24,7 +24,7 @@ public class PembelianDAO {
             conn.setAutoCommit(false); // Mulai transaksi
             
             // 1. Insert ke tabel pembelian
-            String sqlPembelian = "INSERT INTO pembelian (id_user, id_supplier, tanggal, total_harga) VALUES (?, ?, CURDATE(), ?)";
+            String sqlPembelian = "INSERT INTO pembelian (id_user, id_supplier, total_harga) VALUES (?, ?, ?)";
             psPembelian = conn.prepareStatement(sqlPembelian, Statement.RETURN_GENERATED_KEYS);
             psPembelian.setInt(1, pembelian.getIdUser());
             psPembelian.setInt(2, pembelian.getIdSupplier());

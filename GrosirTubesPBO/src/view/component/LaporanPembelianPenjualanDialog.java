@@ -4,30 +4,32 @@
  */
 package view.component;
 
-import dao.LaporanPenjualanDAO;
+import dao.LaporanPembelianPenjualanDAO;
 import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import model.DetailPembelian;
 import model.DetailPenjualan;
 /**
  *
  * @author Personal
  */
-public class LaporanPenjualanDialog extends javax.swing.JDialog {
+public class LaporanPembelianPenjualanDialog extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LaporanPenjualanDialog.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LaporanPembelianPenjualanDialog.class.getName());
 
-    private LaporanPenjualanDAO dao;
+    private LaporanPembelianPenjualanDAO dao;
     private DefaultTableModel tableModel;
     private DecimalFormat df = new DecimalFormat("#,###");
+    private String mode;
     /**
      * Creates new form LaporanPenjualanDialog
      */
-    public LaporanPenjualanDialog(java.awt.Frame parent, boolean modal) {
+    public LaporanPembelianPenjualanDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
-        dao = new LaporanPenjualanDAO();
+        dao = new LaporanPembelianPenjualanDAO();
         
         String[] judul = {"Nama Produk", "Harga", "Kuantitas", "Subtotal"};
         tableModel = new DefaultTableModel(judul, 0) {
@@ -41,25 +43,41 @@ public class LaporanPenjualanDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
     }
     
-    public void tampilkanDetail(int idPenjualan, String tanggal) {
+    public void tampilkanDetail(String mode, int idPembelianOrPenjualan, String tanggal) {
         lblJudul.setText("WAKTU TRANSAKSI: " + tanggal);
-        loadData(idPenjualan);
+        loadData(mode, idPembelianOrPenjualan);
         this.setVisible(true);
     }
     
-    private void loadData(int idPenjualan) {
+    private void loadData(String mode, int idPembelianOrPenjualan) {
         tableModel.setRowCount(0);
-        List<DetailPenjualan> list = dao.getDetailTransaksi(idPenjualan);
         
-        for (DetailPenjualan dp : list) {
-            Object[] row = {
-                dp.getNamaProduk(),
-                df.format(dp.getHargaSatuan()),
-                dp.getJumlah(),
-                df.format(dp.getSubtotal())
-            };
-            tableModel.addRow(row);
+        if(mode.equalsIgnoreCase("PENJUALAN")){
+            List<DetailPenjualan> list = dao.getDetailTransaksiPenjualan(idPembelianOrPenjualan);
+        
+            for (DetailPenjualan dp : list) {
+                Object[] row = {
+                    dp.getNamaProduk(),
+                    df.format(dp.getHargaSatuan()),
+                    dp.getJumlah(),
+                    df.format(dp.getSubtotal())
+                };
+                tableModel.addRow(row);
+            }
+        }else{
+            List<DetailPembelian> list = dao.getDetailTransaksiPembelian(idPembelianOrPenjualan);
+        
+            for (DetailPembelian dp : list) {
+                Object[] row = {
+                    dp.getNamaProduk(),
+                    df.format(dp.getHargaSatuan()),
+                    dp.getJumlah(),
+                    df.format(dp.getSubTotal())
+                };
+                tableModel.addRow(row);
+            }
         }
+        
     }
 
     /**
@@ -118,29 +136,29 @@ public class LaporanPenjualanDialog extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
                     .addComponent(lblJudul, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)))
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addGap(10, 10, 10)
                 .addComponent(lblJudul)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
 
         pack();
@@ -175,7 +193,7 @@ public class LaporanPenjualanDialog extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                LaporanPenjualanDialog dialog = new LaporanPenjualanDialog(new javax.swing.JFrame(), true);
+                LaporanPembelianPenjualanDialog dialog = new LaporanPembelianPenjualanDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -4,33 +4,45 @@
  */
 package view.component;
 
-import dao.LaporanPenjualanDAO;
+import dao.LaporanPembelianPenjualanDAO;
+import dao.SupplierDAO;
 import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import model.Pembelian;
 import model.Penjualan;
+import model.Supplier;
 /**
  *
  * @author Personal
  */
-public class LaporanPenjualanForm extends javax.swing.JPanel {
+public class LaporanPembelianPenjualanForm extends javax.swing.JPanel {
 
-    private LaporanPenjualanDAO dao;
+    private LaporanPembelianPenjualanDAO dao;
     private DefaultTableModel tableModel;
     private DecimalFormat df = new DecimalFormat("#,###");
+    private String mode;
+    private final SupplierDAO supplierDAO = new SupplierDAO();
+    private List<Supplier> listSupplier;
     
     /**
      * Creates new form LaporanPenjualanForm
      */
-    public LaporanPenjualanForm() {
+    public LaporanPembelianPenjualanForm(String mode) {
         initComponents();
+        this.mode = mode;
+        panelLabel.setText("LAPORAN TRANSAKSI " + mode);
+        dao = new LaporanPembelianPenjualanDAO();
+        String[] judul;
         
-        dao = new LaporanPenjualanDAO();
-        
-        String[] judul = {"ID Transaksi", "Tanggal", "Kasir", "Total Belanja"}; 
+        if(mode.equalsIgnoreCase("PENJUALAN")){
+            judul = new String[] {"ID Transaksi", "Tanggal", "Kasir", "Total Penjualan"};
+        } else {
+            judul = new String[] {"ID Transaksi", "Tanggal", "Kasir", "Supplier","Total Belanja"};
+        }
         
         tableModel = new DefaultTableModel(judul, 0) {
             @Override
@@ -39,22 +51,40 @@ public class LaporanPenjualanForm extends javax.swing.JPanel {
             }
         };
         tblLaporan.setModel(tableModel);
-        
+        listSupplier = supplierDAO.getAllSupplier();
         loadData();
     }
     
     private void loadData() {
-        tableModel.setRowCount(0);
-        List<Penjualan> list = dao.getAllPenjualan();
+        listSupplier = supplierDAO.getAllSupplier(); 
+
+        tableModel.setRowCount(0); 
+        if (mode.equalsIgnoreCase("PENJUALAN")){
+            List<Penjualan> list = dao.getAllPenjualan();
         
-        for (Penjualan p : list) {
-            Object[] row = {
-                p.getIdPenjualan(),
-                p.getTanggal(),
-                p.getNamaUser(),
-                df.format(p.getTotalHarga())
-            };
-            tableModel.addRow(row);
+            for (Penjualan p : list) {
+                Object[] row = {
+                    p.getIdPenjualan(),
+                    p.getTanggal(),
+                    p.getNamaUser(),
+                    df.format(p.getTotalHarga())
+                };
+                tableModel.addRow(row);
+            }
+        } else {
+            List<Pembelian> list = dao.getAllPembelian();
+        
+            for (Pembelian p : list) {
+//                System.out.println("ID Transaksi: " + p.getIdPembelian() + " | ID Supplier: " + p.getIdSupplier());
+                Object[] row = {
+                    p.getIdPembelian(),
+                    p.getTanggal(),
+                    p.getNamaUser(),
+                    getNamaSupplierById(p.getIdSupplier()), 
+                    df.format(p.getTotalHarga())
+                };
+                tableModel.addRow(row);
+            }
         }
     }
 
@@ -67,14 +97,14 @@ public class LaporanPenjualanForm extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel3 = new javax.swing.JLabel();
+        panelLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLaporan = new javax.swing.JTable();
         btnDetail = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
 
-        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        jLabel3.setText("LAPORAN TRANSAKSI PENJUALAN");
+        panelLabel.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        panelLabel.setText("LAPORAN TRANSAKSI PENJUALAN");
 
         tblLaporan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -116,13 +146,13 @@ public class LaporanPenjualanForm extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
-                        .addContainerGap())
+                        .addGap(10, 10, 10))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE)
+                        .addComponent(panelLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 806, Short.MAX_VALUE)
                         .addGap(45, 45, 45))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnDetail)
@@ -133,15 +163,15 @@ public class LaporanPenjualanForm extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
+                .addComponent(panelLabel)
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -151,15 +181,14 @@ public class LaporanPenjualanForm extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Pilih transaksi yang ingin dilihat detailnya!");
             return;
         }
-
-        int idPenjualan = Integer.parseInt(tblLaporan.getValueAt(row, 0).toString());
         
         String tanggalLengkap = tblLaporan.getValueAt(row, 1).toString();
+        
+        int idPembelianOrPenjualan = Integer.parseInt(tblLaporan.getValueAt(row, 0).toString());
 
         JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-        LaporanPenjualanDialog dialog = new LaporanPenjualanDialog(parent, true);
-        
-        dialog.tampilkanDetail(idPenjualan, tanggalLengkap);
+        LaporanPembelianPenjualanDialog dialog = new LaporanPembelianPenjualanDialog(parent, true);
+        dialog.tampilkanDetail(mode, idPembelianOrPenjualan, tanggalLengkap);
     }//GEN-LAST:event_btnDetailActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
@@ -170,8 +199,22 @@ public class LaporanPenjualanForm extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDetail;
     private javax.swing.JButton btnRefresh;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel panelLabel;
     private javax.swing.JTable tblLaporan;
     // End of variables declaration//GEN-END:variables
+
+    private String getNamaSupplierById(int idSupplier) {
+        if (listSupplier == null || listSupplier.isEmpty()) {
+            return "Unknown (List Empty)";
+        }
+
+        for (Supplier s : listSupplier) {
+            if (s.getIdSupplier() == idSupplier) {
+                return s.getNamaSupplier();
+            }
+        }
+        return "Unknown";
+    }
+
 }

@@ -4,7 +4,7 @@ import view.component.DefaultForm;
 import view.component.KategoriForm;
 import view.component.SupplierForm;
 import view.component.PenjualanForm;
-import view.component.LaporanPenjualanForm;
+import view.component.LaporanPembelianPenjualanForm;
 import view.component.HomeForm;
 import java.awt.Component;
 import view.layout.menu.MenuEvent;
@@ -101,10 +101,10 @@ public class MainMenu extends javax.swing.JFrame {
                     showForm(new PenjualanForm(userLogin)); // ganti panel
                 }
                 else if(index == 3 && subIndex == 1){
-                    showForm(new DefaultForm("Laporan 1")); // ganti panel
+                    showForm(new LaporanPembelianPenjualanForm("PEMBELIAN")); // ganti panel
                 }
                 else if(index == 3 && subIndex == 2){
-                    showForm(new LaporanPenjualanForm()); // ganti panel
+                    showForm(new LaporanPembelianPenjualanForm("PENJUALAN")); // ganti panel
                 }
                 else if(index == 3 && subIndex == 3){
                     showForm(new DefaultForm("Laporan 3")); // ganti panel
