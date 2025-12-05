@@ -119,7 +119,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnEdit">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ubah"/>
+        <Property name="text" type="java.lang.String" value="PERBARUI"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditActionPerformed"/>
@@ -127,7 +127,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnTambah">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Tambah"/>
+        <Property name="text" type="java.lang.String" value="TAMBAH"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTambahActionPerformed"/>
@@ -135,7 +135,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnHapus">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Hapus"/>
+        <Property name="text" type="java.lang.String" value="HAPUS"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHapusActionPerformed"/>
@@ -145,7 +145,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnCari">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Cari"/>
+        <Property name="text" type="java.lang.String" value="CARI"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCariActionPerformed"/>
