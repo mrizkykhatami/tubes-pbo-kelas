@@ -187,7 +187,7 @@ public class MainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        showForm(new DefaultForm("Tampilan Default atau Awal Masuk"));
+        showForm(new DashboardForm());
     }//GEN-LAST:event_formWindowOpened
 
     /**
