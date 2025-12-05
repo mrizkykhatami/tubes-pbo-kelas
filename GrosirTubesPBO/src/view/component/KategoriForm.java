@@ -30,7 +30,12 @@ public class KategoriForm extends javax.swing.JPanel {
         
         // Setup Kolom Tabel
         String[] judul = {"ID", "Nama Kategori"};
-        tableModel = new DefaultTableModel(judul, 0);
+        tableModel = new DefaultTableModel(judul, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tblKategori.setModel(tableModel);
         
         loadData();
@@ -129,15 +134,23 @@ public class KategoriForm extends javax.swing.JPanel {
 
         tblKategori.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nama Kategori"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblKategori);
 
         btnHapus.setText("HAPUS");

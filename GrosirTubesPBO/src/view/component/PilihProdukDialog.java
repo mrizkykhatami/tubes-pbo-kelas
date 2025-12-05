@@ -61,7 +61,12 @@ public class PilihProdukDialog extends javax.swing.JDialog {
         } else {
             // Untuk penjualan: ID, Nama Produk, Harga, Stok
             String[] judul = {"ID", "Nama Produk", "Harga", "Stok"};
-            tableModel = new DefaultTableModel(judul, 0);
+            tableModel = new DefaultTableModel(judul, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
         }
         
         tblProduk.setModel(tableModel);
@@ -142,9 +147,24 @@ public class PilihProdukDialog extends javax.swing.JDialog {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nama Produk", "Harga", "Stok"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblProduk);
 
         btnCari.setText("CARI");

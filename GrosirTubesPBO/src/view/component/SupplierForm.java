@@ -29,7 +29,12 @@ public class SupplierForm extends javax.swing.JPanel {
         dao = new SupplierDAO();
         
         String[] judul = {"ID", "Nama Supplier", "Telepon", "Alamat"};
-        tableModel = new DefaultTableModel(judul, 0);
+        tableModel = new DefaultTableModel(judul, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Mengembalikan false agar sel tidak bisa diedit
+            }
+        };
         tblSupplier.setModel(tableModel);
         
         loadData();
@@ -141,9 +146,17 @@ public class SupplierForm extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nama Supplier", "Telepon", "Alamat"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblSupplier);
 
         btnPerbarui.setText("PERBARUI");

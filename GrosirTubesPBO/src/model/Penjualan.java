@@ -9,12 +9,14 @@ public class Penjualan {
     private String tanggal;
     private int totalHarga;
     
+    private String namaUser;
+    
     // List untuk menampung barang-barang yang dibeli dalam 1 struk ini
     private List<DetailPenjualan> listDetail = new ArrayList<>();
 
     public Penjualan() {
     }
-
+    
     // Setter dan Getter
     public int getIdPenjualan() {
         return idPenjualan;
@@ -54,6 +56,14 @@ public class Penjualan {
 
     public void setListDetail(List<DetailPenjualan> listDetail) {
         this.listDetail = listDetail;
+    }
+    
+    public String getNamaUser() {
+        return namaUser;
+    }
+    
+    public void setNamaUser(String namaUser) {
+        this.namaUser = namaUser;
     }
     
     // Helper untuk menambah item ke list

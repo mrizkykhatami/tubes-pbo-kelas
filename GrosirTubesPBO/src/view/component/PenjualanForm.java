@@ -28,6 +28,7 @@ public class PenjualanForm extends javax.swing.JPanel {
     private DefaultTableModel tableModel;
     
     private User userLogin;
+    private int stokSaatIni = 0;
     
     // Format mata uang
     private DecimalFormat df = new DecimalFormat("#,###");
@@ -44,7 +45,12 @@ public class PenjualanForm extends javax.swing.JPanel {
         keranjang = new ArrayList<>();
         
         String[] judul = {"ID Produk", "Nama Produk", "Harga", "Kuantitas", "Subtotal"};
-        tableModel = new DefaultTableModel(judul, 0);
+        tableModel = new DefaultTableModel(judul, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tblKeranjang.setModel(tableModel);
         
         resetForm();
@@ -58,6 +64,7 @@ public class PenjualanForm extends javax.swing.JPanel {
 //        txtBayar.setText("");
 //        txtKembalian.setText("");
         lblTotal.setText("0");
+        stokSaatIni = 0;
         
         keranjang.clear();
         tableModel.setRowCount(0);
@@ -125,15 +132,23 @@ public class PenjualanForm extends javax.swing.JPanel {
 
         tblKeranjang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID Produk", "Nama Produk", "Harga", "Kuantitas", "Subtotal"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblKeranjang);
 
         jLabel1.setText("ID Produk :");
@@ -290,6 +305,9 @@ public class PenjualanForm extends javax.swing.JPanel {
             txtIdProduk.setText(String.valueOf(p.getIdProduk()));
             txtNamaProduk.setText(p.getNamaProduk());
             txtHarga.setText(String.valueOf(p.getHarga()));
+            
+            stokSaatIni = p.getStok(); 
+            
             txtJumlah.requestFocus();
         }
     }//GEN-LAST:event_btnCariProdukActionPerformed
@@ -308,14 +326,36 @@ public class PenjualanForm extends javax.swing.JPanel {
             int id = Integer.parseInt(txtIdProduk.getText());
             String nama = txtNamaProduk.getText();
             int harga = Integer.parseInt(txtHarga.getText());
-            int qty = Integer.parseInt(txtJumlah.getText());
+            int qtyInput = Integer.parseInt(txtJumlah.getText());
             
-            int subtotal = harga * qty;
+            if (qtyInput <= 0) {
+                JOptionPane.showMessageDialog(this, "Jumlah beli tidak boleh 0 atau kurang!");
+                return;
+            }
+
+            int qtyDiKeranjang = 0;
+            for (DetailPenjualan d : keranjang) {
+                if (d.getIdProduk() == id) {
+                    qtyDiKeranjang = d.getJumlah();
+                    break;
+                }
+            }
+            
+            int totalAkanDibeli = qtyInput + qtyDiKeranjang;
+
+            if (totalAkanDibeli > stokSaatIni) {
+                JOptionPane.showMessageDialog(this, 
+                    "Stok tidak mencukupi!\nStok Tersedia: " + stokSaatIni + 
+                    "\nSudah di keranjang: " + qtyDiKeranjang);
+                return;
+            }
+            
+            int subtotal = harga * qtyInput;
             
             boolean ada = false;
             for(DetailPenjualan d : keranjang) {
                 if(d.getIdProduk() == id) {
-                    d.setJumlah(d.getJumlah() + qty);
+                    d.setJumlah(d.getJumlah() + qtyInput);
                     d.setSubtotal(d.getHargaSatuan() * d.getJumlah());
                     ada = true;
                     break;
@@ -323,7 +363,7 @@ public class PenjualanForm extends javax.swing.JPanel {
             }
             
             if(!ada) {
-                DetailPenjualan detail = new DetailPenjualan(id, nama, qty, harga, subtotal);
+                DetailPenjualan detail = new DetailPenjualan(id, nama, qtyInput, harga, subtotal);
                 keranjang.add(detail);
             }
             
@@ -333,9 +373,10 @@ public class PenjualanForm extends javax.swing.JPanel {
             txtNamaProduk.setText("");
             txtHarga.setText("");
             txtJumlah.setText("");
+            stokSaatIni = 0;
             
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Format jumlah salah!");
+            JOptionPane.showMessageDialog(this, "Format jumlah harus berupa angka!");
         }
     }//GEN-LAST:event_btnTambahActionPerformed
 
