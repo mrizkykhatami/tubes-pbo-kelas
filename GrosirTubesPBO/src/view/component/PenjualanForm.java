@@ -66,6 +66,8 @@ public class PenjualanForm extends javax.swing.JPanel {
         lblTotal.setText("0");
         stokSaatIni = 0;
         
+        fieldTotalBayar.setText("");
+        
         keranjang.clear();
         tableModel.setRowCount(0);
     }
@@ -107,6 +109,7 @@ public class PenjualanForm extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel8 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKeranjang = new javax.swing.JTable();
@@ -126,9 +129,24 @@ public class PenjualanForm extends javax.swing.JPanel {
         lblTotal = new javax.swing.JLabel();
         btnBatal = new javax.swing.JButton();
         btnSimpan = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        fieldTotalBayar = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+
+        jLabel8.setText("jLabel8");
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         jLabel3.setText("DATA PENJUALAN");
+        
+        fieldTotalBayar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE && c != KeyEvent.VK_DELETE) {
+                    evt.consume();   // blokir karakter non-angka
+                }
+            }
+        });
+
 
         tblKeranjang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -209,7 +227,7 @@ public class PenjualanForm extends javax.swing.JPanel {
         });
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setText("TOTAL :");
+        jLabel6.setText("TOTAL HARGA");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Rp");
@@ -231,6 +249,14 @@ public class PenjualanForm extends javax.swing.JPanel {
                 btnSimpanActionPerformed(evt);
             }
         });
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel11.setText("TOTAL BAYAR");
+
+        fieldTotalBayar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel9.setText("Rp");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -269,15 +295,27 @@ public class PenjualanForm extends javax.swing.JPanel {
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(20, 20, 20)
-                                .addComponent(jLabel7)
-                                .addGap(10, 10, 10)
-                                .addComponent(lblTotal)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(22, 22, 22)
-                                .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel11))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(20, 20, 20)
+                                        .addComponent(jLabel7))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel9)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblTotal)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(22, 22, 22)
+                                        .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(fieldTotalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
                         .addGap(10, 10, 10))))
         );
         layout.setVerticalGroup(
@@ -288,31 +326,38 @@ public class PenjualanForm extends javax.swing.JPanel {
                 .addGap(33, 33, 33)
                 .addComponent(btnCariProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtIdProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtIdProduk, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel5)
+                        .addComponent(txtJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtNamaProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNamaProduk, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(btnHapusItem, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
-                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
                     .addComponent(lblTotal)
                     .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(fieldTotalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addGap(18, 18, 18))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -417,29 +462,80 @@ public class PenjualanForm extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Keranjang masih kosong!");
             return;
         }
-        
-        int total = hitungTotalBelanja();
-        
-        int confirm = JOptionPane.showConfirmDialog(this, 
-                "Total Transaksi: Rp " + df.format(total) + "\nSimpan data ini?", 
-                "Konfirmasi", 
-                JOptionPane.YES_NO_OPTION);
-        
+
+        int total = hitungTotalBelanja();   // total yang harus dibayar
+
+        // --- VALIDASI TOTAL BAYAR ---
+        String strTotalBayar = fieldTotalBayar.getText().trim();
+        if (strTotalBayar.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Masukkan Total Bayar terlebih dahulu!");
+            fieldTotalBayar.requestFocus();
+            return;
+        }
+
+        int totalBayar;
+        try {
+            // kalau nanti kamu pakai format pakai titik, bisa dibersihkan dulu
+            strTotalBayar = strTotalBayar.replace(".", "").replace(",", "");
+            totalBayar = Integer.parseInt(strTotalBayar);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Total Bayar harus berupa angka!");
+            fieldTotalBayar.requestFocus();
+            return;
+        }
+
+        if (totalBayar < total) {
+            JOptionPane.showMessageDialog(this,
+                    "Total Bayar kurang!\n" +
+                    "Total yang harus dibayar: Rp " + df.format(total));
+            fieldTotalBayar.requestFocus();
+            return;
+        }
+
+        int kembalian = totalBayar - total;
+
+        // --- FAKTUR ---
+        StringBuilder faktur = new StringBuilder();
+        faktur.append("FAKTUR PENJUALAN\n");
+        faktur.append("------------------------------------------------------------\n");
+
+        for (DetailPenjualan d : keranjang) {
+            faktur.append(d.getNamaProduk())
+                  .append(" x").append(d.getJumlah())
+                  .append(" @ ").append(df.format(d.getHargaSatuan()))
+                  .append(" = ").append(df.format(d.getSubtotal()))
+                  .append("\n");
+        }
+
+        faktur.append("------------------------------------------------------------\n");
+        faktur.append("Total Harga  : Rp ").append(df.format(total)).append("\n");
+        faktur.append("Total Bayar   : Rp ").append(df.format(totalBayar)).append("\n");
+        faktur.append("Kembalian    : Rp ").append(df.format(kembalian)).append("\n\n");
+        faktur.append("Simpan transaksi ini?");
+
+        // --- TAMPILKAN POPUP FAKTUR + KONFIRMASI ---
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                faktur.toString(),
+                "Konfirmasi Transaksi",
+                JOptionPane.YES_NO_OPTION
+        );
+
         if (confirm == JOptionPane.YES_OPTION) {
-            
             Penjualan p = new Penjualan();
-            
+
             if (userLogin != null) {
                 p.setIdUser(userLogin.getIdUser());
             } else {
                 p.setIdUser(1); 
             }
-            
+
             p.setTotalHarga(total);
             p.setListDetail(keranjang);
             
+
             boolean sukses = penjualanDAO.simpanTransaksi(p);
-            
+
             if (sukses) {
                 JOptionPane.showMessageDialog(this, "Transaksi Berhasil Disimpan!");
                 resetForm();
@@ -485,13 +581,17 @@ public class PenjualanForm extends javax.swing.JPanel {
     private javax.swing.JButton btnHapusItem;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambah;
+    private javax.swing.JTextField fieldTotalBayar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblKeranjang;
