@@ -43,8 +43,8 @@ public class Header extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(237, 237, 237));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/component/logo.png"))); // NOI18N
-        jLabel1.setText("Grosir Mamah Hamzah");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/mini store.png"))); // NOI18N
+        jLabel1.setText(" Toko Grosir Mang Alan");
 
         logoutButton.setBackground(new java.awt.Color(255, 0, 51));
         logoutButton.setForeground(new java.awt.Color(255, 255, 255));
@@ -67,7 +67,7 @@ public class Header extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
                 .addComponent(namaUserLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(logoutButton)
@@ -106,7 +106,7 @@ public class Header extends javax.swing.JPanel {
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     public void setNamaUserLabel(String nama){
-        namaUserLabel.setText("Hallo, " + nama);
+        namaUserLabel.setText("Halo, " + nama);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

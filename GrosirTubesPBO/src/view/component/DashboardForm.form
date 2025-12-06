@@ -95,7 +95,7 @@
               <Font name="SansSerif" size="24" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="SELAMAT DATANG DI TOKO GROSIR CINA"/>
+            <Property name="text" type="java.lang.String" value="SELAMAT DATANG DI TOKO GROSIR MANG ALAN"/>
           </Properties>
         </Component>
       </SubComponents>
