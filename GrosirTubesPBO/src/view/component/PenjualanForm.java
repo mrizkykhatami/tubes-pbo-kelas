@@ -39,6 +39,16 @@ public class PenjualanForm extends javax.swing.JPanel {
     public PenjualanForm(User user) {
         initComponents();
         
+        fieldTotalBayar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE && c != KeyEvent.VK_DELETE) {
+                    evt.consume();   // blokir karakter non-angka
+                }
+            }
+        });
+
+
         this.userLogin = user;
         
         penjualanDAO = new PenjualanDAO();
@@ -137,16 +147,6 @@ public class PenjualanForm extends javax.swing.JPanel {
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         jLabel3.setText("DATA PENJUALAN");
-        
-        fieldTotalBayar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                char c = evt.getKeyChar();
-                if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE && c != KeyEvent.VK_DELETE) {
-                    evt.consume();   // blokir karakter non-angka
-                }
-            }
-        });
-
 
         tblKeranjang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -323,7 +323,7 @@ public class PenjualanForm extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(jLabel3)
-                .addGap(33, 33, 33)
+                .addGap(40, 40, 40)
                 .addComponent(btnCariProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
