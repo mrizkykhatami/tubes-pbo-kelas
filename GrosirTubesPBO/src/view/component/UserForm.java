@@ -152,28 +152,28 @@ public class UserForm extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         jLabel3.setText("CRUD KARYAWAN");
 
-        btnEdit.setText("Ubah");
+        btnEdit.setText("PERBARUI");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditActionPerformed(evt);
             }
         });
 
-        btnTambah.setText("Tambah");
+        btnTambah.setText("TAMBAH");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTambahActionPerformed(evt);
             }
         });
 
-        btnHapus.setText("Hapus");
+        btnHapus.setText("HAPUS");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHapusActionPerformed(evt);
             }
         });
 
-        btnCari.setText("Cari");
+        btnCari.setText("CARI");
         btnCari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCariActionPerformed(evt);
