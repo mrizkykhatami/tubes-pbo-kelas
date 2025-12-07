@@ -44,8 +44,8 @@ public class InputUserForm extends javax.swing.JDialog {
         this.idUser = s.getIdUser();
         nama.setText(s.getNamaUser());
         username.setText(s.getUsername());
-        pass.setText("********");
-        pass.setEnabled(false);
+        pass.setText("***");
+//        pass.setEnabled(false);
         setRoleCombo(s.getRole());
 
     }

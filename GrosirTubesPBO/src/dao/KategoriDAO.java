@@ -113,4 +113,29 @@ public class KategoriDAO {
         }
         return listKategori;
     }
+    
+    // Cek apakah kategori dipakai di produk
+    public boolean isKategoriDigunakan(int idKategori) {
+        boolean isUsed = false;
+        String sql = "SELECT COUNT(*) AS total FROM produk WHERE id_kategori = ?";
+
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idKategori);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int total = rs.getInt("total");
+                    if (total > 0) {
+                        isUsed = true; // Kategori sedang digunakan!
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Cek Kategori: " + e.getMessage());
+        }
+        return isUsed;
+    }
+    
 }

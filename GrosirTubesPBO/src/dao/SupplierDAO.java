@@ -122,4 +122,28 @@ public class SupplierDAO {
         }
         return listSupplier;
     }
+    
+    public boolean isSupplierDigunakan(int idSupplier) {
+        boolean isUsed = false;
+        String sql = "SELECT COUNT(*) AS total FROM produk WHERE id_supplier = ?";
+
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idSupplier);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int total = rs.getInt("total");
+                    if (total > 0) {
+                        isUsed = true; // Supplier sedang digunakan!
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Cek Supplier: " + e.getMessage());
+        }
+        return isUsed;
+    }
+    
 }

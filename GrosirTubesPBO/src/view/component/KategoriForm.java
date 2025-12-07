@@ -99,11 +99,22 @@ public class KategoriForm extends javax.swing.JPanel {
             return;
         }
         
+        int id = Integer.parseInt(tblKategori.getValueAt(row, 0).toString());
+
+        // Cek apakah kategori ini terhubung dengan produk
+        if (dao.isKategoriDigunakan(id)) {
+            JOptionPane.showMessageDialog(this, 
+                "Tidak dapat dihapus guna menjaga konsistensi data! \nData ini sudah tercatat dalam laporan.", 
+                "Peringatan", 
+                JOptionPane.WARNING_MESSAGE);
+            return; // STOP, jangan lanjut hapus
+        }
+        
         int confirm = JOptionPane.showConfirmDialog(this, "Hapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            int id = Integer.parseInt(tblKategori.getValueAt(row, 0).toString());
             dao.deleteKategori(id);
             loadData();
+            JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
         }
     }
     
